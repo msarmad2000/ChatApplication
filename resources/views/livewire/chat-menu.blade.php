@@ -41,7 +41,7 @@
                 <ul class="list-unstyled ">
                     @foreach (($activeChat->messages) as $message)
                         @if($message->isAuthenticatedUsers())
-                            <li class="d-flex justify-content-between mb-4">
+                            <li class="d-flex flex-start mb-4">
                                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
                                     class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
                                 <div class="card mask-custom">
@@ -49,8 +49,10 @@
                                         <p class="fw-bold mb-0">
                                             {{$message->user->name}}
                                         </p>
-                                        <p class="small ml-2"><i class="far fa-clock"></i> 12 mins ago</p>
-                                        <p class="small ml-2">
+                                        {{-- <p class="small ml-2"><i class="far fa-clock"></i> 12 mins ago</p> --}}
+                                        <p class="small"><i class="far fa-clock"></i> {{$message->updated_at->diffForHumans()}}
+                                        </p>
+                                        <p class="small">
                                             <i class="fas fa-edit" wire:click='editMessage({{ $message->id }})'></i>
                                             <i class="fa fa-trash" aria-hidden="true" wire:click="delete"></i>
                                         </p>
@@ -58,7 +60,16 @@
                                     <div class="card-body">
                                     <p class="mb-0">
                                         @if($message->id == $this->editMessageId)
-                                            {{dd('i am here')}}
+                                            {{-- {{dd($message->id)}} --}}
+                                            <form wire:submit.prevent="UpdateMessage">
+                                                <li class="mb-3">
+                                                <div class="form-outline form-white">
+                                                    <textarea class="form-control" id="textAreaExample3" rows="4" wire:model="message"></textarea>
+                                                    <label class="form-label" for="textAreaExample3">Message</label>
+                                                </div>
+                                                </li>
+                                                <button type="submit" class="btn btn-light btn-lg btn-rounded float-end">Send</button>
+                                            </form>
                                         @else
                                             {{$message->messages}}
                                         @endif

@@ -47,9 +47,17 @@ class ChatMenu extends Component
     public function editMessage($messageId)
     {
         $this->editMessageId = $messageId;
-        // dd($messageId);
-        // $this->editedMessage = ChatMessage::findOrFail($messageId)->messages;
-        $this->update = !$this->update;
+        // $this->update = !$this->update;
+    }
+    public function UpdateMessage(){
+        $this->validate([
+            'message' => 'required|string|max:255',
+        ]);
+        ChatMessage::where('id', $this->editMessageId)
+        ->update(['messages' => $this->message]);
+        $this->editMessageId = null;
+        $this->message = '';
+        session()->flash('message', 'Message updated successfully.');
     }
 
     public function delete(){
